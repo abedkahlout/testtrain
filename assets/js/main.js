@@ -1,26 +1,26 @@
-'use strict';
+const resultElement = document.getElementById('followers');
+const follow = document.getElementById('follow');
+const likes = document.getElementById('likes');
+const name = document.getElementById('name');
+const imgElement = document.getElementById('photo');
+const imageContainer = document.getElementById('imageContainer');
 
-/**
-* add eventListenter on multiple elements
-*/
+const options = {
+    method: 'GET',
+};
 
-const addEventOnElements = function(elements , eventType , callback){
-    for (let i = 0, len = elements.length; i < len; i++ ) {
-
-        elements[i].addEventListener(eventType , callback)
-        
-    }
-}
-
-
-/**
-* PRELOADER
-*/
-const preloader = document.querySelector("[data-preloader]");
-const circle = document.querySelector("[data-circle]");
-
-window.addEventListener("load" , function(){
-    preloader.classList.add("loaded");
-    circle.style.animation = "none";
-    document.body.classList.add("loaded");
-});
+fetch('https://ybiapi.fresh-app.com/api/demo_profile', options)
+    .then(response => response.json())
+    .then(response => {
+        name.innerHTML = response.name;
+        resultElement.innerHTML = response.followers;
+        follow.innerHTML = response.follow;
+        likes.innerHTML = response.likes;
+        imgElement.src = response.photo;
+         response.images_list.forEach(imageUrl => {
+            const img = document.createElement('img');
+            img.src = imageUrl;
+            imageContainer.appendChild(img);
+        });
+    })
+    .catch(err => console.error(err));
